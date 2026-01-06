@@ -1,0 +1,56 @@
+<div class="home-container">
+  <h1 class="title">Quiz App</h1>
+  <p class="subtitle">Test your knowledge on any topic!</p>
+
+  <div class="theme-section">
+    <h2>Choose a Theme</h2>
+
+    <div class="preset-themes">
+      @for (theme of presetThemes; track theme) {
+        <button
+          class="theme-btn"
+          [class.selected]="selectedTheme() === theme"
+          (click)="selectTheme(theme)"
+          [disabled]="isLoading()"
+        >
+          {{ theme }}
+        </button>
+      }
+    </div>
+
+    <div class="custom-theme">
+      <p class="or-divider">or enter your own</p>
+      <input
+        type="text"
+        placeholder="Enter a custom theme..."
+        [value]="customTheme()"
+        (input)="onCustomThemeChange($any($event.target).value)"
+        [disabled]="isLoading()"
+        class="custom-input"
+      />
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="error-message">{{ error() }}</div>
+  }
+
+  <button
+    class="start-btn"
+    [disabled]="!canStartQuiz()"
+    (click)="startQuiz()"
+  >
+    @if (isLoading()) {
+      <span class="loading-spinner"></span>
+      Generating Questions...
+    } @else {
+      Start Quiz
+    }
+  </button>
+
+  @if (getActiveTheme()) {
+    <p class="selected-info">
+      Selected theme: <strong>{{ getActiveTheme() }}</strong>
+    </p>
+  }
+</div>

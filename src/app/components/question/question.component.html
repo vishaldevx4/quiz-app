@@ -1,0 +1,23 @@
+<div class="question-container">
+  <h2 class="question-text">{{ question.question }}</h2>
+
+  <div class="options">
+    @for (option of question.options; track $index) {
+      <button
+        class="option-btn"
+        [class]="getOptionClass($index)"
+        (click)="selectOption($index)"
+        [disabled]="isSubmitted"
+      >
+        <span class="option-label">{{ getOptionLabel($index) }}</span>
+        <span class="option-text">{{ option }}</span>
+        @if (isSubmitted && $index === question.correctAnswer) {
+          <span class="icon correct-icon">✓</span>
+        }
+        @if (isSubmitted && selectedAnswer === $index && $index !== question.correctAnswer) {
+          <span class="icon incorrect-icon">✗</span>
+        }
+      </button>
+    }
+  </div>
+</div>

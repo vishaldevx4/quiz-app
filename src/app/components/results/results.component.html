@@ -1,0 +1,48 @@
+<div class="results-container">
+  <div class="score-card">
+    <h1 class="title">Quiz Complete!</h1>
+    <p class="message">{{ getScoreMessage() }}</p>
+
+    <div class="score-circle">
+      <span class="score">{{ quizService.finalScore().score }}</span>
+      <span class="divider">/</span>
+      <span class="total">{{ quizService.finalScore().total }}</span>
+    </div>
+
+    <p class="percentage">{{ quizService.finalScore().percentage }}%</p>
+
+    <button class="play-again-btn" (click)="playAgain()">
+      Play Again
+    </button>
+  </div>
+
+  <div class="review-section">
+    <h2>Review Your Answers</h2>
+
+    @for (result of results; track $index) {
+      <div class="review-card" [class.correct]="result.isCorrect" [class.incorrect]="!result.isCorrect">
+        <div class="question-number">Question {{ $index + 1 }}</div>
+        <p class="question-text">{{ result.question.question }}</p>
+
+        <div class="answers">
+          @for (option of result.question.options; track $index) {
+            <div
+              class="answer-row"
+              [class.correct-answer]="$index === result.question.correctAnswer"
+              [class.user-wrong]="result.userAnswer === $index && $index !== result.question.correctAnswer"
+            >
+              <span class="option-label">{{ getOptionLabel($index) }}</span>
+              <span class="option-text">{{ option }}</span>
+              @if ($index === result.question.correctAnswer) {
+                <span class="badge correct-badge">Correct</span>
+              }
+              @if (result.userAnswer === $index && $index !== result.question.correctAnswer) {
+                <span class="badge wrong-badge">Your Answer</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

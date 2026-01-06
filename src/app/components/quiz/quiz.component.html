@@ -1,0 +1,49 @@
+<div class="quiz-container">
+  @if (quizService.currentQuestion(); as question) {
+    <div class="quiz-header">
+      <app-progress-bar
+        [current]="quizService.progress().current"
+        [total]="quizService.progress().total"
+      />
+      <app-timer
+        [duration]="30"
+        [isActive]="!quizService.isAnswerSubmitted()"
+        (timeUp)="onTimeUp()"
+      />
+    </div>
+
+    <div class="quiz-content">
+      <div class="theme-badge">{{ quizService.quizState().theme }}</div>
+
+      <app-question
+        [question]="question"
+        [selectedAnswer]="quizService.getCurrentAnswer()"
+        [isSubmitted]="quizService.isAnswerSubmitted()"
+        (answerSelected)="onAnswerSelected($event)"
+      />
+    </div>
+
+    <div class="quiz-actions">
+      @if (!quizService.isAnswerSubmitted()) {
+        <button
+          class="btn submit-btn"
+          [disabled]="!canSubmit()"
+          (click)="onSubmit()"
+        >
+          Submit Answer
+        </button>
+      } @else {
+        <button
+          class="btn next-btn"
+          (click)="onNext()"
+        >
+          {{ getButtonText() }}
+        </button>
+      }
+    </div>
+
+    <div class="score-display">
+      Score: {{ quizService.quizState().score }} / {{ quizService.progress().current - (quizService.isAnswerSubmitted() ? 0 : 1) }}
+    </div>
+  }
+</div>

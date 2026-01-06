@@ -1,0 +1,11 @@
+<div class="progress-container">
+  <div class="progress-text">
+    Question <span class="current">{{ current }}</span> of <span class="total">{{ total }}</span>
+  </div>
+  <div class="progress-bar">
+    <div
+      class="progress-fill"
+      [style.width.%]="getProgressPercent()"
+    ></div>
+  </div>
+</div>
