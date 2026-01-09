@@ -1,0 +1,55 @@
+<div class="menu-container">
+  <h1 class="title">Pictionary Guessing Game</h1>
+  <p class="subtitle">Guess the drawing before all strokes are revealed!</p>
+
+  <div class="category-section">
+    <h2>Choose a Category</h2>
+
+    <div class="categories">
+      @for (category of categories; track category) {
+        <button
+          class="category-btn"
+          [class.selected]="selectedCategory() === category"
+          (click)="selectCategory(category)"
+          [disabled]="isLoading()"
+        >
+          {{ category }}
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="error-message">{{ error() }}</div>
+  }
+
+  <div class="action-buttons">
+    <button
+      class="back-btn"
+      (click)="goBack()"
+      [disabled]="isLoading()"
+    >
+      Back to Home
+    </button>
+
+    <button
+      class="start-btn"
+      [disabled]="!canStartGame()"
+      (click)="startGame()"
+    >
+      @if (isLoading()) {
+        <span class="loading-spinner"></span>
+        Generating Drawing...
+      } @else {
+        Start Game
+      }
+    </button>
+  </div>
+
+  @if (selectedCategory()) {
+    <p class="selected-info">
+      Selected category: <strong>{{ selectedCategory() }}</strong>
+    </p>
+  }
+</div>
+

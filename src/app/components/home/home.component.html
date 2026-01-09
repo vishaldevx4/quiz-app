@@ -1,56 +1,81 @@
 <div class="home-container">
   <h1 class="title">Team Invictus Playground</h1>
-  <p class="subtitle">Test your knowledge on any topic!</p>
+  <p class="subtitle">Choose your game and have fun!</p>
 
-  <div class="theme-section">
-    <h2>Choose a Theme</h2>
+  <div class="game-selector">
+    <h2>Select a Game</h2>
+    <div class="game-cards">
+      <div class="game-card quiz-card" (click)="selectGame('quiz')">
+        <div class="game-icon">📝</div>
+        <h3>Quiz Game</h3>
+        <p>Test your knowledge with AI-generated questions</p>
+      </div>
 
-    <div class="preset-themes">
-      @for (theme of presetThemes; track theme) {
-        <button
-          class="theme-btn"
-          [class.selected]="selectedTheme() === theme"
-          (click)="selectTheme(theme)"
-          [disabled]="isLoading()"
-        >
-          {{ theme }}
-        </button>
-      }
-    </div>
-
-    <div class="custom-theme">
-      <p class="or-divider">or enter your own</p>
-      <input
-        type="text"
-        placeholder="Enter a custom theme..."
-        [value]="customTheme()"
-        (input)="onCustomThemeChange($any($event.target).value)"
-        [disabled]="isLoading()"
-        class="custom-input"
-      />
+      <div class="game-card trivia-card" (click)="selectGame('trivia')">
+        <div class="game-icon">🧩</div>
+        <h3>Riddle Challenge</h3>
+        <p>Solve mind-bending riddles and earn points based on difficulty</p>
+      </div>
     </div>
   </div>
 
-  @if (error()) {
-    <div class="error-message">{{ error() }}</div>
+  @if (selectedGame() === 'quiz') {
+    <div class="theme-section">
+      <h2>Choose a Theme</h2>
+
+      <div class="preset-themes">
+        @for (theme of presetThemes; track theme) {
+          <button
+            class="theme-btn"
+            [class.selected]="selectedTheme() === theme"
+            (click)="selectTheme(theme)"
+            [disabled]="isLoading()"
+          >
+            {{ theme }}
+          </button>
+        }
+      </div>
+
+      <div class="custom-theme">
+        <p class="or-divider">or enter your own</p>
+        <input
+          type="text"
+          placeholder="Enter a custom theme..."
+          [value]="customTheme()"
+          (input)="onCustomThemeChange($any($event.target).value)"
+          [disabled]="isLoading()"
+          class="custom-input"
+        />
+      </div>
+    </div>
+
+    @if (error()) {
+      <div class="error-message">{{ error() }}</div>
+    }
+
+    <button
+      class="start-btn"
+      [disabled]="!canStartQuiz()"
+      (click)="startQuiz()"
+    >
+      @if (isLoading()) {
+        <span class="loading-spinner"></span>
+        Generating Questions...
+      } @else {
+        Start Quiz
+      }
+    </button>
+
+    @if (getActiveTheme()) {
+      <p class="selected-info">
+        Selected theme: <strong>{{ getActiveTheme() }}</strong>
+      </p>
+    }
   }
 
-  <button
-    class="start-btn"
-    [disabled]="!canStartQuiz()"
-    (click)="startQuiz()"
-  >
-    @if (isLoading()) {
-      <span class="loading-spinner"></span>
-      Generating Questions...
-    } @else {
-      Start Quiz
-    }
-  </button>
-
-  @if (getActiveTheme()) {
-    <p class="selected-info">
-      Selected theme: <strong>{{ getActiveTheme() }}</strong>
-    </p>
+  @if (selectedGame() === 'pictionary') {
+    <div class="redirect-message">
+      <p>Loading Pictionary...</p>
+    </div>
   }
 </div>

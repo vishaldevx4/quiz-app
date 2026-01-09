@@ -1,0 +1,79 @@
+<div class="results-container">
+  <div class="score-card">
+    <h1 class="title">Game Over!</h1>
+    <p class="message">{{ getResultMessage() }}</p>
+
+    <div class="word-reveal">
+      <p class="word-label">The word was:</p>
+      <h2 class="word">{{ results.word }}</h2>
+    </div>
+
+    <div class="score-display" [class]="getScoreColor()">
+      <div class="score-number">{{ results.score }}</div>
+      <div class="score-label">points</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-label">Strokes Revealed</span>
+        <span class="stat-value">{{ results.revealedStrokes }} / {{ results.totalStrokes }}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Total Guesses</span>
+        <span class="stat-value">{{ results.guesses.length }}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Result</span>
+        <span class="stat-value" [class.success]="results.foundCorrectAnswer" [class.failure]="!results.foundCorrectAnswer">
+          {{ results.foundCorrectAnswer ? 'Success!' : 'Not Solved' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="play-again-btn" (click)="playAgain()">
+        Play Again
+      </button>
+      <button class="home-btn" (click)="goHome()">
+        Back to Home
+      </button>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <h2>Complete Drawing</h2>
+    
+    <div class="canvas-container">
+      <svg viewBox="0 0 400 400" class="drawing-canvas">
+        @for (stroke of getAllStrokes(); track $index) {
+          <path 
+            [attr.d]="stroke.path"
+            [attr.stroke]="stroke.color"
+            [attr.stroke-width]="stroke.strokeWidth"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        }
+      </svg>
+    </div>
+
+    @if (results.guesses.length > 0) {
+      <div class="guess-history">
+        <h3>Your Guesses</h3>
+        <div class="guesses-list">
+          @for (guess of results.guesses; track $index) {
+            <div class="guess-item" [class.correct-guess]="guess.toLowerCase() === results.word.toLowerCase()">
+              <span class="guess-number">{{ $index + 1 }}</span>
+              <span class="guess-text">{{ guess }}</span>
+              @if (guess.toLowerCase() === results.word.toLowerCase()) {
+                <span class="correct-icon">✓</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
+

@@ -1,0 +1,72 @@
+<div class="menu-container">
+  <h1 class="title">Riddle Challenge</h1>
+  <p class="subtitle">Test your wit with mind-bending riddles!</p>
+
+  <div class="selection-section">
+    <h2>Choose Category</h2>
+    <div class="categories">
+      @for (category of categories; track category) {
+        <button
+          class="category-btn"
+          [class.selected]="selectedCategory() === category"
+          (click)="selectCategory(category)"
+          [disabled]="isLoading()"
+        >
+          {{ category }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="selection-section">
+    <h2>Select Difficulty</h2>
+    <div class="difficulties">
+      @for (diff of difficulties; track diff.value) {
+        <button
+          class="difficulty-btn"
+          [class.selected]="selectedDifficulty() === diff.value"
+          [style.--diff-color]="getDifficultyColor(diff.value)"
+          (click)="selectDifficulty(diff.value)"
+          [disabled]="isLoading()"
+        >
+          <span class="diff-label">{{ diff.label }}</span>
+          <span class="diff-points">{{ diff.points }} pts/question</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="error-message">{{ error() }}</div>
+  }
+
+  <div class="action-buttons">
+    <button
+      class="back-btn"
+      (click)="goBack()"
+      [disabled]="isLoading()"
+    >
+      Back to Home
+    </button>
+
+    <button
+      class="start-btn"
+      [disabled]="!canStartGame()"
+      (click)="startGame()"
+    >
+      @if (isLoading()) {
+        <span class="loading-spinner"></span>
+        Generating Riddles...
+      } @else {
+        Start Riddle Challenge
+      }
+    </button>
+  </div>
+
+  @if (selectedCategory() && selectedDifficulty()) {
+    <p class="selected-info">
+      <strong>{{ selectedCategory() }}</strong> - {{ selectedDifficulty() | titlecase }} Level
+    </p>
+  }
+</div>
+

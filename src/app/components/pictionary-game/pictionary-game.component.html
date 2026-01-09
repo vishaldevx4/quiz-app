@@ -1,0 +1,84 @@
+<div class="game-container">
+  <div class="game-header">
+    <h1>Guess the Drawing!</h1>
+    <p class="category-label">Category: <strong>{{ pictionaryService.pictionaryState().category }}</strong></p>
+  </div>
+
+  <div class="drawing-section">
+    <div class="stroke-info">
+      <span class="stroke-count">
+        Strokes Revealed: {{ pictionaryService.strokeProgress().current }} / {{ pictionaryService.strokeProgress().total }}
+      </span>
+    </div>
+
+    <div class="canvas-container">
+      <svg viewBox="0 0 400 400" class="drawing-canvas">
+        @for (stroke of pictionaryService.visibleStrokes(); track $index) {
+          <path 
+            [attr.d]="stroke.path"
+            [attr.stroke]="stroke.color"
+            [attr.stroke-width]="stroke.strokeWidth"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="stroke"
+            [style.animation-delay]="($index * 0.1) + 's'"
+          />
+        }
+      </svg>
+    </div>
+
+    <button
+      class="reveal-btn"
+      [disabled]="!pictionaryService.canRevealMore()"
+      (click)="revealNextStroke()"
+    >
+      {{ getStrokeButtonText() }}
+    </button>
+  </div>
+
+  <div class="guess-section">
+    <h2>What is it?</h2>
+    
+    @if (showFeedback()) {
+      <div class="feedback" [class.correct]="feedbackType() === 'correct'" [class.incorrect]="feedbackType() === 'incorrect'">
+        {{ feedbackMessage() }}
+      </div>
+    }
+
+    <div class="guess-input-group">
+      <input
+        type="text"
+        class="guess-input"
+        placeholder="Type your guess..."
+        [value]="currentGuess()"
+        (input)="onGuessInput($any($event.target).value)"
+        (keyup.enter)="submitGuess()"
+        [disabled]="pictionaryService.pictionaryState().gameComplete"
+      />
+      <button
+        class="submit-guess-btn"
+        [disabled]="!canSubmitGuess()"
+        (click)="submitGuess()"
+      >
+        Submit Guess
+      </button>
+    </div>
+
+    <div class="previous-guesses">
+      @if (pictionaryService.pictionaryState().guesses.length > 0) {
+        <p class="guesses-label">Previous Guesses:</p>
+        <div class="guesses-list">
+          @for (guess of pictionaryService.pictionaryState().guesses; track $index) {
+            <span class="guess-chip">{{ guess }}</span>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <button class="skip-btn" (click)="skipToResults()">
+    Give Up & See Answer
+  </button>
+</div>
+

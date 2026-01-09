@@ -1,0 +1,91 @@
+<div class="results-container">
+  <div class="score-card" [class]="getPerformanceClass()">
+    <h1 class="title">Riddle Challenge Complete!</h1>
+    <p class="message">{{ getPerformanceMessage() }}</p>
+
+    <div class="category-info">
+      <span class="category-name">{{ results.category }}</span>
+      <span class="difficulty-badge" [style.background-color]="getDifficultyBadgeColor()">
+        {{ results.difficulty | titlecase }}
+      </span>
+    </div>
+
+    <div class="score-display">
+      <div class="score-circle">
+        <div class="score-number">{{ results.score }}</div>
+        <div class="score-max">/ {{ results.maxScore }}</div>
+      </div>
+      <div class="percentage">{{ results.percentage }}%</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value">{{ results.correctAnswers }}</div>
+        <div class="stat-label">Correct</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{{ results.totalQuestions - results.correctAnswers }}</div>
+        <div class="stat-label">Incorrect</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{{ results.totalQuestions }}</div>
+        <div class="stat-label">Total</div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="play-again-btn" (click)="playAgain()">
+        Play Again
+      </button>
+      <button class="home-btn" (click)="goHome()">
+        Back to Home
+      </button>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <h2>Review Your Answers</h2>
+
+    @for (detail of results.details; track $index) {
+      <div class="review-card" [class.correct]="detail.isCorrect" [class.incorrect]="!detail.isCorrect">
+        <div class="card-header">
+          <span class="question-number">Question {{ $index + 1 }}</span>
+          @if (detail.isCorrect) {
+            <span class="points-badge correct">+{{ detail.pointsEarned }} pts</span>
+          } @else {
+            <span class="points-badge incorrect">0 pts</span>
+          }
+        </div>
+
+        <p class="question-text">{{ detail.question.question }}</p>
+
+        <div class="answer-section">
+          @if (detail.isCorrect) {
+            <div class="answer-item correct">
+              <span class="answer-icon">✓</span>
+              <span class="answer-text">{{ detail.userAnswer }}</span>
+            </div>
+          } @else {
+            @if (detail.userAnswer) {
+              <div class="answer-item incorrect">
+                <span class="answer-icon">✗</span>
+                <span class="answer-text">Your answer: {{ detail.userAnswer }}</span>
+              </div>
+            }
+            <div class="answer-item correct">
+              <span class="answer-icon">✓</span>
+              <span class="answer-text">Correct: {{ detail.question.correctAnswer }}</span>
+            </div>
+          }
+        </div>
+
+        @if (detail.question.explanation) {
+          <div class="explanation">
+            <strong>Explanation:</strong> {{ detail.question.explanation }}
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+

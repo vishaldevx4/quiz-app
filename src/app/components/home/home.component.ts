@@ -15,6 +15,7 @@ import { PRESET_THEMES } from '../../models/quiz.model';
 })
 export class HomeComponent {
   presetThemes = PRESET_THEMES;
+  selectedGame = signal<string>('');
   selectedTheme = signal<string>('');
   customTheme = signal<string>('');
   isLoading = signal<boolean>(false);
@@ -25,6 +26,16 @@ export class HomeComponent {
     private quizService: QuizService,
     private router: Router
   ) {}
+
+  selectGame(game: string): void {
+    if (game === 'pictionary') {
+      this.router.navigate(['/pictionary']);
+    } else if (game === 'trivia') {
+      this.router.navigate(['/trivia']);
+    } else {
+      this.selectedGame.set(game);
+    }
+  }
 
   selectTheme(theme: string): void {
     this.selectedTheme.set(theme);
