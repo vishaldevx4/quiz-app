@@ -1,0 +1,35 @@
+<div class="menu-container">
+  <h1 class="title">Logo Challenge</h1>
+  <p class="subtitle">How well do you know famous brands?</p>
+
+  <div class="selection-section">
+    <h2>Choose Game Length</h2>
+    <div class="game-options">
+      @for (option of gameOptions; track option.value) {
+        <button
+          class="option-btn"
+          (click)="startGame(option.value)"
+        >
+          <span class="option-label">{{ option.label }}</span>
+          <span class="option-description">{{ option.description }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <button class="back-btn" (click)="goBack()">
+    Back to Home
+  </button>
+
+  <div class="info-section">
+    <h3>How to Play:</h3>
+    <ul>
+      <li>🏢 A brand logo will be displayed</li>
+      <li>⌨️ Type the brand name in the text box</li>
+      <li>⏱️ You have 30 seconds per logo</li>
+      <li>⚡ Faster answers = more points!</li>
+      <li>📊 Max 100 points per logo (-10 every 5 seconds)</li>
+    </ul>
+  </div>
+</div>
+

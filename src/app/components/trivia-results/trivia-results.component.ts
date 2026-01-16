@@ -44,15 +44,6 @@ export class TriviaResultsComponent implements OnInit {
     return 'needs-improvement';
   }
 
-  getDifficultyBadgeColor(): string {
-    const colors: { [key: string]: string } = {
-      simple: '#4ade80',
-      medium: '#fb923c',
-      hard: '#ef4444'
-    };
-    return colors[this.results.difficulty] || '#666';
-  }
-
   playAgain(): void {
     this.triviaService.resetTrivia();
     this.router.navigate(['/trivia']);

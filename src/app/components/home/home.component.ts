@@ -27,11 +27,15 @@ export class HomeComponent {
     private router: Router
   ) {}
 
-  selectGame(game: string): void {
+  async selectGame(game: string): Promise<void> {
     if (game === 'pictionary') {
       this.router.navigate(['/pictionary']);
     } else if (game === 'trivia') {
       this.router.navigate(['/trivia']);
+    } else if (game === 'logo') {
+      this.router.navigate(['/logo-game']);
+    } else if (game === 'map') {
+      this.router.navigate(['/map-quest']);
     } else {
       this.selectedGame.set(game);
     }

@@ -1,0 +1,94 @@
+<div class="game-container">
+  <div class="game-header">
+    <div class="score-display">
+      <span class="score-label">Score:</span>
+      <span class="score-value">{{ logoService.logoState().score }}</span>
+    </div>
+    
+    <div class="progress-info">
+      <span>Logo {{ logoService.progress().current }} / {{ logoService.progress().total }}</span>
+    </div>
+  </div>
+
+  @if (logoService.currentLogo(); as logo) {
+    <div class="timer-section">
+      <div class="timer-display" [class.warning]="timeRemaining() <= 10">
+        <span class="timer-icon">⏱️</span>
+        <span class="timer-text">{{ timeRemaining() }}s</span>
+        <span class="points-display">{{ currentPoints() }} pts</span>
+      </div>
+      <div class="timer-bar">
+        <div 
+          class="timer-fill" 
+          [style.width.%]="getProgressPercentage()"
+          [class.warning]="timeRemaining() <= 10"
+        ></div>
+      </div>
+    </div>
+
+    <div class="logo-section">
+      <div class="logo-container">
+        <img [src]="logo.imagePath" [alt]="'Brand logo'" class="logo-image" />
+      </div>
+    </div>
+
+    <div class="answer-section">
+      <h2>What brand is this?</h2>
+      
+      @if (showFeedback()) {
+        <div class="feedback" [class.correct]="isCorrect()" [class.incorrect]="!isCorrect()">
+          @if (isCorrect()) {
+            <div class="feedback-content">
+              <span class="feedback-icon">✓</span>
+              <span class="feedback-text">Correct! +{{ pointsEarned() }} points</span>
+            </div>
+          } @else {
+            <div class="feedback-content">
+              <span class="feedback-icon">✗</span>
+              <span class="feedback-text">
+                @if (timeRemaining() === 0) {
+                  Time's up!
+                } @else {
+                  Incorrect
+                }
+              </span>
+            </div>
+            <div class="correct-answer">
+              <span class="label">Correct Answer:</span>
+              <span class="answer">{{ logo.correctName }}</span>
+            </div>
+          }
+        </div>
+      }
+
+      @if (!showFeedback()) {
+        <div class="input-group">
+          <input
+            type="text"
+            class="brand-input"
+            placeholder="Type the brand name..."
+            [value]="userAnswer()"
+            (input)="onAnswerInput($any($event.target).value)"
+            (keyup.enter)="submitAnswer()"
+            [disabled]="showFeedback()"
+            autofocus
+          />
+          <button
+            class="submit-btn"
+            [disabled]="!canSubmit()"
+            (click)="submitAnswer()"
+          >
+            Submit
+          </button>
+        </div>
+      }
+
+      @if (showFeedback()) {
+        <button class="next-btn" (click)="nextLogo()">
+          {{ getButtonText() }}
+        </button>
+      }
+    </div>
+  }
+</div>
+

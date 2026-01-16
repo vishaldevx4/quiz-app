@@ -38,6 +38,30 @@ export const routes: Routes = [
     loadComponent: () => import('./components/trivia-results/trivia-results.component').then(m => m.TriviaResultsComponent)
   },
   {
+    path: 'logo-game',
+    loadComponent: () => import('./components/logo-menu/logo-menu.component').then(m => m.LogoMenuComponent)
+  },
+  {
+    path: 'logo-game/play',
+    loadComponent: () => import('./components/logo-game/logo-game.component').then(m => m.LogoGameComponent)
+  },
+  {
+    path: 'logo-game/results',
+    loadComponent: () => import('./components/logo-results/logo-results.component').then(m => m.LogoResultsComponent)
+  },
+  {
+    path: 'map-quest',
+    loadComponent: () => import('./components/map-menu/map-menu.component').then(m => m.MapMenuComponent)
+  },
+  {
+    path: 'map-quest/play',
+    loadComponent: () => import('./components/map-game/map-game.component').then(m => m.MapGameComponent)
+  },
+  {
+    path: 'map-quest/results',
+    loadComponent: () => import('./components/map-results/map-results.component').then(m => m.MapResultsComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

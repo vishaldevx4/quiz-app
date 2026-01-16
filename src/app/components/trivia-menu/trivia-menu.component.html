@@ -18,23 +18,6 @@
     </div>
   </div>
 
-  <div class="selection-section">
-    <h2>Select Difficulty</h2>
-    <div class="difficulties">
-      @for (diff of difficulties; track diff.value) {
-        <button
-          class="difficulty-btn"
-          [class.selected]="selectedDifficulty() === diff.value"
-          [style.--diff-color]="getDifficultyColor(diff.value)"
-          (click)="selectDifficulty(diff.value)"
-          [disabled]="isLoading()"
-        >
-          <span class="diff-label">{{ diff.label }}</span>
-          <span class="diff-points">{{ diff.points }} pts/question</span>
-        </button>
-      }
-    </div>
-  </div>
 
   @if (error()) {
     <div class="error-message">{{ error() }}</div>
@@ -63,9 +46,9 @@
     </button>
   </div>
 
-  @if (selectedCategory() && selectedDifficulty()) {
+  @if (selectedCategory()) {
     <p class="selected-info">
-      <strong>{{ selectedCategory() }}</strong> - {{ selectedDifficulty() | titlecase }} Level
+      <strong>{{ selectedCategory() }}</strong>
     </p>
   }
 </div>

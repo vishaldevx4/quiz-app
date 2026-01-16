@@ -8,9 +8,6 @@
   <div class="game-header">
     <div class="header-info">
       <h1>{{ triviaService.triviaState().category }}</h1>
-      <span class="difficulty-badge" [style.background-color]="getDifficultyBadgeColor()">
-        {{ triviaService.triviaState().difficulty | titlecase }}
-      </span>
     </div>
     
     <div class="score-display">
@@ -37,24 +34,33 @@
       <p class="points-info">{{ question.points }} points</p>
     </div>
 
-    <div class="answers-section">
-      @for (answer of triviaService.currentQuestionAnswers(); track answer) {
-        <button
-          class="answer-btn"
-          [class.selected]="selectedAnswer() === answer"
-          [class.correct]="isAnswerCorrect(answer)"
-          [class.wrong]="isAnswerWrong(answer)"
+    <div class="answer-input-section">
+      <div class="input-group">
+        <input
+          type="text"
+          class="riddle-input"
+          placeholder="Type your answer here..."
+          [value]="selectedAnswer() || ''"
+          (input)="onAnswerInput($any($event.target).value)"
+          (keyup.enter)="submitAnswer()"
           [disabled]="showResult()"
-          (click)="selectAnswer(answer)"
+          [class.correct-input]="showResult() && isCorrect()"
+          [class.wrong-input]="showResult() && !isCorrect()"
+        />
+        <button
+          class="submit-answer-btn"
+          [disabled]="!canSubmit()"
+          (click)="submitAnswer()"
         >
-          <span class="answer-text">{{ answer }}</span>
-          @if (showResult() && isAnswerCorrect(answer)) {
-            <span class="result-icon">✓</span>
-          }
-          @if (showResult() && isAnswerWrong(answer)) {
-            <span class="result-icon">✗</span>
-          }
+          Submit Answer
         </button>
+      </div>
+      
+      @if (showResult() && !isCorrect() && question.correctAnswer) {
+        <div class="correct-answer-reveal">
+          <span class="label">Correct Answer:</span>
+          <span class="answer">{{ question.correctAnswer }}</span>
+        </div>
       }
     </div>
 
@@ -83,15 +89,7 @@
     }
 
     <div class="action-buttons">
-      @if (!showResult()) {
-        <button
-          class="submit-btn"
-          [disabled]="!canSubmit()"
-          (click)="submitAnswer()"
-        >
-          Submit Answer
-        </button>
-      } @else {
+      @if (showResult()) {
         <button
           class="next-btn"
           (click)="nextQuestion()"

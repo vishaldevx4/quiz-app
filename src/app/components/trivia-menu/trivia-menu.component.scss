@@ -68,56 +68,6 @@
   }
 }
 
-.difficulties {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 15px;
-}
-
-.difficulty-btn {
-  padding: 20px;
-  border: 3px solid #e0e0e0;
-  border-radius: 12px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-
-  &:hover:not(:disabled) {
-    border-color: var(--diff-color);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  &.selected {
-    background: var(--diff-color);
-    border-color: var(--diff-color);
-    
-    .diff-label,
-    .diff-points {
-      color: white;
-    }
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  .diff-label {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #333;
-  }
-
-  .diff-points {
-    font-size: 0.9rem;
-    color: #666;
-  }
-}
-
 .error-message {
   background: #fee;
   color: #c00;

@@ -1,12 +1,13 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TriviaService } from '../../services/trivia.service';
 
 @Component({
   selector: 'app-trivia-game',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './trivia-game.component.html',
   styleUrl: './trivia-game.component.scss'
 })
@@ -28,13 +29,13 @@ export class TriviaGameComponent implements OnInit {
     }
   }
 
-  selectAnswer(answer: string): void {
+  onAnswerInput(value: string): void {
     if (this.showResult()) return;
-    this.selectedAnswer.set(answer);
+    this.selectedAnswer.set(value);
   }
 
   submitAnswer(): void {
-    const answer = this.selectedAnswer();
+    const answer = this.selectedAnswer()?.trim();
     if (!answer || this.showResult()) return;
 
     this.triviaService.selectAnswer(answer);
@@ -57,33 +58,14 @@ export class TriviaGameComponent implements OnInit {
     }
   }
 
-  isAnswerCorrect(answer: string): boolean {
-    if (!this.showResult()) return false;
-    const question = this.triviaService.currentQuestion();
-    return answer === question?.correctAnswer;
-  }
-
-  isAnswerWrong(answer: string): boolean {
-    if (!this.showResult()) return false;
-    return this.selectedAnswer() === answer && !this.isAnswerCorrect(answer);
-  }
-
   canSubmit(): boolean {
-    return !!this.selectedAnswer() && !this.showResult();
+    const answer = this.selectedAnswer()?.trim();
+    return !!answer && answer.length > 0 && !this.showResult();
   }
 
   getButtonText(): string {
     return this.triviaService.isLastQuestion() ? 'See Results' : 'Next Question';
   }
 
-  getDifficultyBadgeColor(): string {
-    const difficulty = this.triviaService.triviaState().difficulty;
-    const colors: { [key: string]: string } = {
-      simple: '#4ade80',
-      medium: '#fb923c',
-      hard: '#ef4444'
-    };
-    return colors[difficulty] || '#666';
-  }
 }
 

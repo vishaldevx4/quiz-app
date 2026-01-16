@@ -1,0 +1,89 @@
+<div class="results-container">
+  <div class="score-card" [class]="getPerformanceClass()">
+    <h1 class="title">Game Complete!</h1>
+    <p class="message">{{ getPerformanceMessage() }}</p>
+
+    <div class="score-display">
+      <div class="score-circle">
+        <div class="score-number">{{ results.totalScore }}</div>
+        <div class="score-max">/ {{ results.maxPossibleScore }}</div>
+      </div>
+      <div class="percentage">{{ results.percentage }}%</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value">{{ results.correctCount }}</div>
+        <div class="stat-label">Correct</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{{ results.totalCount - results.correctCount }}</div>
+        <div class="stat-label">Incorrect</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{{ formatTime(results.averageTime) }}</div>
+        <div class="stat-label">Avg Time</div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="play-again-btn" (click)="playAgain()">
+        Play Again
+      </button>
+      <button class="home-btn" (click)="goHome()">
+        Back to Home
+      </button>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <h2>Your Answers</h2>
+
+    @for (answer of results.answers; track $index) {
+      <div class="answer-card" [class.correct]="answer.isCorrect" [class.incorrect]="!answer.isCorrect">
+        <div class="card-header">
+          <div class="logo-thumbnail">
+            <img [src]="answer.logo.imagePath" [alt]="answer.logo.correctName" />
+          </div>
+          <div class="brand-info">
+            <div class="brand-name">{{ answer.logo.correctName }}</div>
+            <div class="time-taken">{{ formatTime(answer.timeSpent) }}</div>
+          </div>
+          <div class="points-badge" [class.correct]="answer.isCorrect" [class.incorrect]="!answer.isCorrect">
+            @if (answer.isCorrect) {
+              +{{ answer.pointsEarned }} pts
+            } @else {
+              0 pts
+            }
+          </div>
+        </div>
+
+        <div class="answer-details">
+          @if (answer.isCorrect) {
+            <div class="answer-item correct-answer">
+              <span class="answer-icon">✓</span>
+              <span class="answer-text">{{ answer.userAnswer }}</span>
+            </div>
+          } @else {
+            @if (answer.userAnswer) {
+              <div class="answer-item wrong-answer">
+                <span class="answer-icon">✗</span>
+                <span class="answer-text">Your answer: {{ answer.userAnswer }}</span>
+              </div>
+            } @else {
+              <div class="answer-item timeout">
+                <span class="answer-icon">⏱️</span>
+                <span class="answer-text">Timed out</span>
+              </div>
+            }
+            <div class="answer-item correct-answer">
+              <span class="answer-icon">✓</span>
+              <span class="answer-text">Correct: {{ answer.logo.correctName }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
+

@@ -1,0 +1,47 @@
+<div class="fullscreen-game-container">
+  <!-- Top Left Controls -->
+  <div class="top-left-controls">
+    @if (mapService.currentCountry(); as country) {
+      <div class="compact-question">
+        <span class="question-label">Find:</span>
+        <span class="country-name-highlight">{{ country.name }}</span>
+      </div>
+    }
+
+    <div class="compact-score">
+      <span class="score-icon">⭐</span>
+      <span class="score-text">{{ mapService.mapState().score }}</span>
+    </div>
+    
+    <div class="compact-progress">
+      <span>{{ mapService.progress().current }}/{{ mapService.progress().total }}</span>
+    </div>
+
+    @if (showFeedback()) {
+      <div class="feedback-badge" [class.correct]="isCorrect()" [class.incorrect]="!isCorrect()">
+        @if (isCorrect()) {
+          <span class="feedback-icon">✓</span>
+          <span class="feedback-text">Correct!</span>
+        } @else {
+          <span class="feedback-icon">✗</span>
+          <span class="feedback-text">Incorrect</span>
+        }
+      </div>
+
+      <button class="compact-next-btn" (click)="nextCountry()">
+        {{ getButtonText() }} →
+      </button>
+    }
+
+    @if (isTimedMode() && !showFeedback()) {
+      <div class="compact-timer" [class.warning]="timeRemaining() <= 10">
+        <span class="timer-icon">⏱️</span>
+        <span>{{ timeRemaining() }}s</span>
+      </div>
+    }
+  </div>
+
+  <!-- Fullscreen Map -->
+  <div class="fullscreen-map" [class.disabled]="showFeedback()" [innerHTML]="mapSvg()"></div>
+</div>
+

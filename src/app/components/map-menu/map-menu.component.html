@@ -1,0 +1,75 @@
+<div class="menu-container">
+  <h1 class="title">Map Quest</h1>
+  <p class="subtitle">Test your geography knowledge!</p>
+
+  <div class="selection-section">
+    <h2>Game Mode</h2>
+    <div class="option-grid">
+      @for (mode of gameModes; track mode.value) {
+        <button
+          class="option-btn"
+          [class.selected]="selectedMode() === mode.value"
+          (click)="selectMode(mode.value)"
+        >
+          <span class="option-label">{{ mode.label }}</span>
+          <span class="option-description">{{ mode.description }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="selection-section difficulty-section">
+    <h2>🎯 Choose Difficulty Level</h2>
+    <div class="option-grid">
+      @for (difficulty of difficulties; track difficulty.value) {
+        <button
+          class="option-btn"
+          [class.selected]="selectedDifficulty() === difficulty.value"
+          (click)="selectDifficulty(difficulty.value)"
+        >
+          <span class="option-label">{{ difficulty.label }}</span>
+          <span class="option-description">{{ difficulty.description }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (selectedMode() === 'regional') {
+    <div class="selection-section">
+      <h2>Region</h2>
+      <div class="option-grid full-width">
+        @for (region of regions; track region.value) {
+          <button
+            class="option-btn"
+            [class.selected]="selectedRegion() === region.value"
+            (click)="selectRegion(region.value)"
+          >
+            <span class="option-label">{{ region.label }}</span>
+            <span class="option-description">{{ region.description }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="action-buttons">
+    <button class="start-btn" (click)="startGame()">
+      Start Game ({{ getQuestionCount() }} Countries)
+    </button>
+    <button class="back-btn" (click)="goBack()">
+      Back to Home
+    </button>
+  </div>
+
+  <div class="info-section">
+    <h3>How to Play:</h3>
+    <ul>
+      <li>🗺️ Read the country name displayed</li>
+      <li>🖱️ Click on the map where you think it is</li>
+      <li>✅ Get instant feedback on your answer</li>
+      <li>⏱️ In Time Trial mode: 30 seconds per country</li>
+      <li>🏆 Earn 100 points for each correct answer</li>
+    </ul>
+  </div>
+</div>
+

@@ -99,7 +99,15 @@ export class TriviaService {
       return { isCorrect: false, pointsEarned: 0 };
     }
 
-    const isCorrect = currentAnswer === currentQuestion.correctAnswer;
+    // Case-insensitive comparison with trimmed whitespace
+    const normalizedUserAnswer = currentAnswer.toLowerCase().trim();
+    const normalizedCorrectAnswer = currentQuestion.correctAnswer.toLowerCase().trim();
+    
+    // Check for exact match or if user answer is contained in correct answer
+    const isCorrect = normalizedUserAnswer === normalizedCorrectAnswer ||
+                     normalizedCorrectAnswer.includes(normalizedUserAnswer) ||
+                     this.isSimilarAnswer(normalizedUserAnswer, normalizedCorrectAnswer);
+    
     const pointsEarned = isCorrect ? currentQuestion.points : 0;
 
     this.state.update(state => ({
@@ -109,6 +117,14 @@ export class TriviaService {
     }));
 
     return { isCorrect, pointsEarned };
+  }
+
+  private isSimilarAnswer(userAnswer: string, correctAnswer: string): boolean {
+    // Remove common articles and punctuation for comparison
+    const cleanUser = userAnswer.replace(/^(a|an|the)\s+/i, '').replace(/[.,!?;]/g, '');
+    const cleanCorrect = correctAnswer.replace(/^(a|an|the)\s+/i, '').replace(/[.,!?;]/g, '');
+    
+    return cleanUser === cleanCorrect;
   }
 
   nextQuestion(): void {
