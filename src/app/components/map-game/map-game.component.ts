@@ -166,16 +166,28 @@ export class MapGameComponent implements OnInit, OnDestroy {
     if (!clickedCode) {
       const classAttr = target.getAttribute('class');
       if (classAttr) {
-        const classes = classAttr.split(/\s+/);
         const allCountries = Object.values(this.mapService['allCountries']());
-        const matchedCountry = allCountries.find(c => 
-          classes.some(cls => 
-            this.normalizeText(cls) === this.normalizeText(c.name) ||
-            this.normalizeText(cls) === this.normalizeText(c.code)
-          )
+        
+        // First try matching the full class string (e.g., "New Zealand")
+        const matchedByFullClass = allCountries.find(c => 
+          this.normalizeText(classAttr) === this.normalizeText(c.name) ||
+          this.normalizeText(classAttr) === this.normalizeText(c.fullName)
         );
-        if (matchedCountry) {
-          clickedCode = matchedCountry.code;
+        
+        if (matchedByFullClass) {
+          clickedCode = matchedByFullClass.code;
+        } else {
+          // Then try individual class parts
+          const classes = classAttr.split(/\s+/);
+          const matchedCountry = allCountries.find(c => 
+            classes.some(cls => 
+              this.normalizeText(cls) === this.normalizeText(c.name) ||
+              this.normalizeText(cls) === this.normalizeText(c.code)
+            )
+          );
+          if (matchedCountry) {
+            clickedCode = matchedCountry.code;
+          }
         }
       }
     }
@@ -260,11 +272,16 @@ export class MapGameComponent implements OnInit, OnDestroy {
 
           const classAttr = path.getAttribute('class') || '';
           if (classAttr) {
+            // First try matching the full class string (e.g., "New Zealand")
+            const fullClassMatch = targetNames.includes(this.normalizeText(classAttr));
+            
+            // Then try individual class parts
             const classMatches = classAttr
               .split(/\s+/)
               .map(c => this.normalizeText(c))
               .some(c => targetNames.includes(c));
-            if (classMatches) {
+            
+            if (fullClassMatch || classMatches) {
               console.log(`Found by class attribute: ${classAttr}`);
               matchedPaths.push(path);
             }
