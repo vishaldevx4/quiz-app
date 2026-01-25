@@ -78,9 +78,9 @@
 
 .game-cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 
   @media (max-width: 1024px) {
@@ -190,6 +190,19 @@
 
     &::before {
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+    }
+  }
+
+  &.unscramble-card {
+    border-color: #8b5cf6;
+
+    &:hover {
+      border-color: #8b5cf6;
+      box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+    }
+
+    &::before {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
     }
   }
 
