@@ -36,6 +36,8 @@ export class HomeComponent {
       this.router.navigate(['/logo-game']);
     } else if (game === 'map') {
       this.router.navigate(['/map-quest']);
+    } else if (game === 'unscramble') {
+      this.router.navigate(['/unscramble']);
     } else {
       this.selectedGame.set(game);
     }

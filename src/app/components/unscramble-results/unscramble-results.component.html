@@ -1,0 +1,105 @@
+<div class="results-container">
+  <div class="score-card" [class]="getPerformanceClass()">
+    <h1 class="title">Results</h1>
+    <p class="message">{{ getPerformanceMessage() }}</p>
+
+    <div class="category-info">
+      <span class="category-name">{{ results.category }}</span>
+      <span class="difficulty-badge">{{ results.difficulty }}</span>
+    </div>
+
+    <div class="score-display">
+      <div class="score-circle">
+        <div class="score-number">{{ results.score }}</div>
+        <div class="score-max">/ {{ results.maxScore }}</div>
+      </div>
+      <div class="percentage">{{ results.percentage }}%</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value">{{ results.correctAnswers }}</div>
+        <div class="stat-label">Correct</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{{ results.totalWords - results.correctAnswers }}</div>
+        <div class="stat-label">Incorrect</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{{ results.totalWords }}</div>
+        <div class="stat-label">Total</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">{{ results.averageTimePerWord.toFixed(1) }}s</div>
+        <div class="stat-label">Avg Time</div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="play-again-btn" (click)="playAgain()">
+        Play Again
+      </button>
+      <button class="home-btn" (click)="goHome()">
+        Back to Home
+      </button>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <h2>Word Breakdown</h2>
+
+    @for (detail of results.details; track $index) {
+      <div class="review-card" [class.correct]="detail.isCorrect" [class.incorrect]="!detail.isCorrect">
+        <div class="card-header">
+          <span class="word-number">Word {{ $index + 1 }}</span>
+          @if (detail.isCorrect) {
+            <span class="points-badge correct">+{{ detail.pointsEarned }} pts</span>
+          } @else {
+            <span class="points-badge incorrect">0 pts</span>
+          }
+        </div>
+
+        <div class="word-section">
+          <div class="scrambled-word">
+            <span class="label">Scrambled:</span>
+            <span class="word">{{ detail.word.scrambledWord }}</span>
+          </div>
+          <div class="arrow">→</div>
+          <div class="original-word">
+            <span class="label">Original:</span>
+            <span class="word">{{ detail.word.originalWord }}</span>
+          </div>
+        </div>
+
+        <div class="answer-section">
+          @if (detail.isCorrect) {
+            <div class="answer-item correct">
+              <span class="answer-icon">✓</span>
+              <span class="answer-text">{{ detail.userAnswer }}</span>
+            </div>
+          } @else {
+            @if (detail.userAnswer) {
+              <div class="answer-item incorrect">
+                <span class="answer-icon">✗</span>
+                <span class="answer-text">Your answer: {{ detail.userAnswer }}</span>
+              </div>
+            } @else {
+              <div class="answer-item skipped">
+                <span class="answer-icon">−</span>
+                <span class="answer-text">Skipped</span>
+              </div>
+            }
+            <div class="answer-item correct">
+              <span class="answer-icon">✓</span>
+              <span class="answer-text">Correct: {{ detail.word.originalWord }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="metadata">
+          <span class="time-spent">Time: {{ detail.timeSpent.toFixed(1) }}s</span>
+        </div>
+      </div>
+    }
+  </div>
+</div>

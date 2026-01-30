@@ -1,0 +1,101 @@
+<div class="game-container">
+  @if (unscrambleService.isUsingFallback()) {
+    <div class="api-limit-banner">
+      API limit reached. Using pre-generated words for this session.
+    </div>
+  }
+
+  <div class="game-header">
+    <div class="header-info">
+      <h1>{{ unscrambleService.unscrambleState().category }}</h1>
+    </div>
+
+    <div class="score-display">
+      <span class="score-label">Score:</span>
+      <span class="score-value">{{ unscrambleService.unscrambleState().score }}</span>
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-text">
+      Word {{ unscrambleService.progress().current }} of {{ unscrambleService.progress().total }}
+    </div>
+    <div class="progress-bar">
+      <div
+        class="progress-fill"
+        [style.width.%]="(unscrambleService.progress().current / unscrambleService.progress().total) * 100"
+      ></div>
+    </div>
+  </div>
+
+  @if (unscrambleService.currentWord(); as word) {
+    <div class="timer-section">
+      <div class="timer-display" [class.warning]="currentTime() <= 10">
+        <span class="timer-icon">⏱️</span>
+        <span class="timer-text">{{ currentTime() }}s</span>
+      </div>
+      <div class="timer-bar">
+        <div
+          class="timer-fill"
+          [style.width.%]="(currentTime() / 60) * 100"
+          [class.warning]="currentTime() <= 10"
+        ></div>
+      </div>
+    </div>
+
+    <div class="word-section">
+      <div class="scrambled-word">{{ word.scrambledWord }}</div>
+      <p class="points-info">{{ word.basePoints }} points</p>
+    </div>
+
+    <div class="answer-section">
+      @if (!showResult()) {
+        <div class="input-group">
+          <input
+            type="text"
+            class="word-input"
+            placeholder="Type the unscrambled word..."
+            [value]="userInput()"
+            (input)="onInputChange($any($event.target).value)"
+            (keyup.enter)="submitAnswer()"
+            [disabled]="showResult()"
+            autofocus
+          />
+          <button
+            class="submit-btn"
+            [disabled]="!canSubmit()"
+            (click)="submitAnswer()"
+          >
+            Submit
+          </button>
+        </div>
+      }
+
+      @if (showResult()) {
+        <div class="feedback" [class.correct]="isCorrect()" [class.incorrect]="!isCorrect()">
+          @if (isCorrect()) {
+            <div class="feedback-content">
+              <span class="feedback-icon">✓</span>
+              <span class="feedback-text">Correct! +{{ pointsEarned() }} points</span>
+            </div>
+          } @else {
+            <div class="feedback-content">
+              <span class="feedback-icon">✗</span>
+              <span class="feedback-text">
+                @if (currentTime() === 0) {
+                  Time's up!
+                } @else {
+                  Incorrect
+                }
+              </span>
+            </div>
+            <div class="correct-answer">
+              <span class="label">Correct Answer:</span>
+              <span class="answer">{{ word.originalWord }}</span>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

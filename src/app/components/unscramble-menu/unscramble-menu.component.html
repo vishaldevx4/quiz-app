@@ -1,0 +1,78 @@
+<div class="menu-container">
+  <h1 class="title">Unscramble</h1>
+  <p class="subtitle">Test your word skills by unscrambling letters!</p>
+
+  <div class="selection-section">
+    <h2>Choose Category</h2>
+    <div class="categories">
+      @for (category of categories; track category) {
+        <button
+          class="category-btn"
+          [class.selected]="selectedCategory() === category"
+          (click)="selectCategory(category)"
+          [disabled]="isLoading()"
+        >
+          {{ category }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="selection-section">
+    <h2>Choose Difficulty</h2>
+    <div class="difficulties">
+      @for (level of difficultyLevels; track level.value) {
+        <button
+          class="difficulty-btn"
+          [class.selected]="selectedDifficulty() === level.value"
+          (click)="selectDifficulty(level.value)"
+          [disabled]="isLoading()"
+        >
+          <span class="difficulty-label">{{ level.label }}</span>
+          <span class="difficulty-points">{{ level.basePoints }} pts</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="error-message">{{ error() }}</div>
+  }
+
+  <div class="action-buttons">
+    <button
+      class="back-btn"
+      (click)="goBack()"
+      [disabled]="isLoading()"
+    >
+      Back to Home
+    </button>
+
+    <button
+      class="start-btn"
+      [disabled]="!canStartGame()"
+      (click)="startGame()"
+    >
+      @if (isLoading()) {
+        <span class="loading-spinner"></span>
+        Generating Words...
+      } @else {
+        Start Unscramble
+      }
+    </button>
+  </div>
+
+  @if (selectedCategory() && selectedDifficulty()) {
+    <p class="selected-info">
+      <strong>{{ selectedCategory() }}</strong> - <strong>{{ selectedDifficulty() }}</strong>
+    </p>
+  } @else if (selectedCategory()) {
+    <p class="selected-info">
+      <strong>{{ selectedCategory() }}</strong>
+    </p>
+  } @else if (selectedDifficulty()) {
+    <p class="selected-info">
+      <strong>{{ selectedDifficulty() }}</strong>
+    </p>
+  }
+</div>

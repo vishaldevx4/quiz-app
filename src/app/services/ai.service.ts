@@ -15,7 +15,8 @@ export class AiService {
     return this.http.post<Question[]>(this.apiUrl, { theme }).pipe(
       catchError(error => {
         console.error('Error generating questions:', error);
-        return of(this.getFallbackQuestions(theme));
+        // Re-throw so the component can show the error
+        throw error;
       })
     );
   }

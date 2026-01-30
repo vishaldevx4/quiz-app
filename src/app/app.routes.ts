@@ -62,6 +62,18 @@ export const routes: Routes = [
     loadComponent: () => import('./components/map-results/map-results.component').then(m => m.MapResultsComponent)
   },
   {
+    path: 'unscramble',
+    loadComponent: () => import('./components/unscramble-menu/unscramble-menu.component').then(m => m.UnscrambleMenuComponent)
+  },
+  {
+    path: 'unscramble/game',
+    loadComponent: () => import('./components/unscramble-game/unscramble-game.component').then(m => m.UnscrambleGameComponent)
+  },
+  {
+    path: 'unscramble/results',
+    loadComponent: () => import('./components/unscramble-results/unscramble-results.component').then(m => m.UnscrambleResultsComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }
